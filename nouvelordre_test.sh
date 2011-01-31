@@ -1,7 +1,7 @@
 #!/bin/sh
 for file in $(locate "*.py")
 	do echo "testing $file"
-	reorder --infile $file --outfile /dev/null
+	reorder --infile $file --outfile /dev/null --dump
 	if [ $? != 0 ] ; then
 		echo "Please send the bug report (nouvelordre_bug_report) to feth@tuttu.info. Many thanks."
 		exit 1
