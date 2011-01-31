@@ -22,14 +22,21 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 from _ast import Import, ImportFrom
 from ast import parse
-from enthought.traits.api import Dict, Either, HasTraits, Int, List, Str, Tuple
+try:
+    from enthought.traits.api import Dict, Either, HasTraits, Int, List, Str, \
+        Tuple
+except ImportError:
+    _HAS_TRAITS = False
+else:
+    _HAS_TRAITS = True
 
 
 class Block(HasTraits):
     """
     The base for code block
     """
-    content = Str
+    if _HAS_TRAITS:
+        content = Str
 
 
 class AnyBlock(Block):
@@ -95,10 +102,17 @@ class ImportBlock(Block):
     Code blocks consisting of imports are handled here.
     """
 
-    importfroms = Dict(str, List(Tuple(str, Either(str, None))))
-    imports = Dict(str, Either(str, None))
-    startline = Int(default_value=-1)
-    endline = Int()
+    if _HAS_TRAITS:
+        importfroms = Dict(str, List(Tuple(str, Either(str, None))))
+        imports = Dict(str, Either(str, None))
+        startline = Int(default_value=-1)
+        endline = Int()
+    else:
+        def __init__(self):
+            self.importfroms = {}
+            self.imports = {}
+            self.startline = -1
+            self.endline = 0
 
     def add(self, statement, endline):
         """
