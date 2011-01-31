@@ -42,6 +42,29 @@ def _do_pass(infile):
     return result
 
 
+def compileerror(infile):
+    try:
+        if hasattr(infile, 'name') and not infile.isatty():
+            with open(infile.name, 'r') as handle:
+                try:
+                    compile(handle.read(), infile.name, 'exec')
+                except (SyntaxError, TypeError):
+                    stderr.write(
+                            "An error occured with your file, however I cannot"\
+                            " even compile it, thus exiting with status 129\n"
+                            )
+                    exit(129)
+    except Exception, err:
+        stderr.write("Unexpected err: %s\n" % err)
+
+
+def notimplemented(err):
+    stderr.write(
+        "Something is not implemented -you may ask for the feature."\
+        "Exiting with status 130. Error:%s\n" % err)
+    exit(130)
+
+
 def main(infile, outfile, keep_files):
     """
     BEWARE:
@@ -52,8 +75,9 @@ def main(infile, outfile, keep_files):
     try:
         value1 = _do_pass(infile)
     except NotImplementedError, err:
-        stderr.write('%s\n' % err)
-        exit(130)
+        notimplemented(err)
+    except (SyntaxError, TypeError):
+        compileerror(infile)
     except Exception:
         stderr.write("Error in first pass on file %s .\n" % infile.name)
         raise
@@ -76,20 +100,6 @@ def main(infile, outfile, keep_files):
 
     #check that a processed file can be processed twice without a change
     if value1 != value2:
-        try:
-            if hasattr(infile, 'name') and not infile.isatty():
-                with open(infile.name, 'r') as handle:
-                    try:
-                        compile(handle.read(), infile.name, 'exec')
-                    except (SyntaxError, TypeError):
-                        stderr.write(
-                            "An error occured with your file, however I "
-                            "cannot even compile it, thus exiting with status 129"
-                            )
-                        exit(129)
-        except Exception, err:
-            stderr.write("Unexpected err: %s\n" % err)
-
         if not keep_files:
             assert False, "Sorry, there is a bug in this program when ran "\
             "against %s. You may want to rerun with --dump."
