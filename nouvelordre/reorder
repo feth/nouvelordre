@@ -52,7 +52,7 @@ def main(infile, outfile, keep_files):
     try:
         value1 = _do_pass(infile)
     except Exception:
-        stderr.write("Error in first pass on file %s." % infile.name)
+        stderr.write("Error in first pass on file %s .\n" % infile.name)
         raise
     #2nd pass: tmp1 -> tmp2
     try:
@@ -62,9 +62,9 @@ def main(infile, outfile, keep_files):
             handle, tmpfile = mkstemp()
             with open(tmpfile, 'w') as handle:
                 handle.write(value1)
-        stderr.write("Error in second pass on file %s.\n" % infile.name)
+        stderr.write("Error in second pass on file %s .\n" % infile.name)
         if keep_files:
-            stderr.write("Saved temp file in %s.\n" % tmpfile)
+            stderr.write("Saved temp file in %s .\n" % tmpfile)
         else:
             stderr.write(
                     "Would have saved the temp file with the --dump option\n."
