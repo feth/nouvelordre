@@ -46,23 +46,23 @@ def spitfrom(module, data):
     module: string
     data: list of duples: (name, asname) - asname may be None
     """
-    phrase = 'from %s import' % module
-    current_line = phrase
+    lines = ['from %s import' % module]
     for index, (name, asname) in enumerate(data):
         if index:
             #not adding comma when index == 0
-            phrase += ','
+            lines[-1] += ','
         if asname:
             addition = ' %s as %s' % name, asname
         else:
             addition = ' %s' % name
-        candidate = '%s%s' % (current_line, addition)
-        if len(candidate) > 79:
-            current_line = '    %s' % addition
-            phrase = '%s\\\n%s' % (phrase, current_line)
-        else:
-            phrase += addition
-    return phrase
+
+        if len(lines[-1]) + len(addition) > 79:
+            lines[-1] += '\\'
+            lines.append('    ')
+        lines[-1] += addition
+
+    return '\n'.join(lines)
+
 
 
 def nice_fromline(data):
@@ -186,7 +186,6 @@ class NewOrder(object):
                     % (lineno, infile.name)
                     )
             self.firstlevels.append(firstlevel)
-
 
     def reorder(self, fdesc):
         """
