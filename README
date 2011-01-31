@@ -3,11 +3,13 @@ Nouvel Ordre
 
 A tool for reordering import statements inside Python code blocks.
 
-This project lives on github::
+This project lives on github:
 
-    git clone git://github.com/feth/nouvelordre.git
+* github html page: http://feth.github.com/nouvelordre/
+* github classic page: https://github.com/feth/nouvelordre
+* repository::
+    $ git clone git://github.com/feth/nouvelordre.git
 
-And url: https://github.com/feth/nouvelordre
 
 Features
 --------
