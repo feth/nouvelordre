@@ -20,7 +20,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 """
 
 
-from _ast import ImportFrom, Import
+from _ast import Import, ImportFrom
 from ast import parse
 from enthought.traits.api import Dict, Either, HasTraits, Int, List, Str, Tuple
 
