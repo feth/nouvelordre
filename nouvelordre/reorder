@@ -24,8 +24,10 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 from argparse import ArgumentParser
 from nouvelordre import NewOrder
+from os.path import join
 from StringIO import StringIO
 from sys import stdin, stdout
+from tempfile import mkdtemp
 
 
 def _do_pass(infile):
@@ -39,7 +41,8 @@ def _do_pass(infile):
     handle.close()
     return result
 
-def main(infile, outfile):
+
+def main(infile, outfile, keep_files):
     """
     BEWARE:
     infile: a file descriptor like (must return lines when iterated over)
@@ -51,8 +54,18 @@ def main(infile, outfile):
     value2 = _do_pass(StringIO(value1))
 
     #check that a processed file can be processed twice without a change
-    assert value1 == value2, "Sorry, there is a bug in this program. Please "\
-        "file a bug with the processed file attached (%s)." % infile.name
+    if value1 != value2:
+        if not keep_files:
+            assert False, "Sorry, there is a bug in this program when ran "\
+            "against %s. You may want to rerun with --dump."
+
+        tmpdir = mkdtemp()
+        for dump, name in ((value1, '1st_pass'), (value2, '2nd_pass')):
+            with open(join(tmpdir, name), 'w') as handle:
+                handle.write(dump)
+
+        assert False, "Sorry, there is a bug in this program when ran "\
+            "against %s. Work files kept in %s." % (infile.name, tmpdir)
 
 
     #deliver the result
@@ -93,10 +106,16 @@ def _parseargs():
         default=stdout,
         help='output, defaults to standard output',
         )
+    parser.add_argument(
+        '--dump',
+        action='store_true',
+        default=False,
+        help='In case of failure, keep processing data in files',
+        )
     return parser.parse_args()
 
 
 if __name__ == '__main__':
     ARGS = _parseargs()
-    main(ARGS.infile, ARGS.outfile)
+    main(ARGS.infile, ARGS.outfile, ARGS.dump)
 
