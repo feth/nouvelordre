@@ -39,9 +39,16 @@ Limitations
 Dependances
 -----------
 
+Compulsory
+~~~~~~~~~~
+
 * Python 2.6 at least (for ast)
-* enthought's python-traits
 * Python 2.7 or python-argparse
+
+Recommended
+~~~~~~~~~~~
+
+* enthought's python-traits - to avoid bug while coding this
 
 Getting started
 ---------------
