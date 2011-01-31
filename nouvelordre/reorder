@@ -26,8 +26,8 @@ from argparse import ArgumentParser
 from nouvelordre import NewOrder
 from os.path import join
 from StringIO import StringIO
-from sys import stdin, stdout
-from tempfile import mkdtemp
+from sys import stderr, stdin, stdout
+from tempfile import mkdtemp, mkstemp
 
 
 def _do_pass(infile):
@@ -49,9 +49,27 @@ def main(infile, outfile, keep_files):
     outfile: a filename or a file descriptor (with a write() method)
     """
     #1st pass: outfile -> tmp1
-    value1 = _do_pass(infile)
+    try:
+        value1 = _do_pass(infile)
+    except Exception:
+        stderr.write("Error in first pass on file %s." % infile.name)
+        raise
     #2nd pass: tmp1 -> tmp2
-    value2 = _do_pass(StringIO(value1))
+    try:
+        value2 = _do_pass(StringIO(value1))
+    except Exception:
+        if keep_files:
+            handle, tmpfile = mkstemp()
+            with open(tmpfile, 'w') as handle:
+                handle.write(value1)
+        stderr.write("Error in second pass on file %s.\n" % infile.name)
+        if keep_files:
+            stderr.write("Saved temp file in %s.\n" % tmpfile)
+        else:
+            stderr.write(
+                    "Would have saved the temp file with the --dump option\n."
+                )
+        raise
 
     #check that a processed file can be processed twice without a change
     if value1 != value2:

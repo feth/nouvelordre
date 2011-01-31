@@ -22,8 +22,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 from _ast import Import, ImportFrom
 from ast import parse
+
 try:
-    from enthought.traits.api import Dict, Either, HasTraits, Int, List, Str, \
+    from enthought.traits.api import Dict, Either, HasTraits, Int, List, Str,\
         Tuple
 except ImportError:
     _HAS_TRAITS = False
@@ -59,7 +60,7 @@ def spitfrom(module, data):
             #not adding comma when index == 0
             lines[-1] += ','
         if asname:
-            addition = ' %s as %s' % name, asname
+            addition = ' %s as %s' % (name, asname)
         else:
             addition = ' %s' % name
 
@@ -162,6 +163,10 @@ class ImportBlock(Block):
 
     def _pretty(self):
         for module, data in self.importfroms.iteritems():
+            if ('*', None) in data:
+                starindex = data.index(('*', None))
+                data.pop(starindex)
+                yield spitfrom(module, (('*', None),))
             data = nice_fromline(data)
             yield spitfrom(module, data)
         for imp, asname in self.imports.iteritems():
