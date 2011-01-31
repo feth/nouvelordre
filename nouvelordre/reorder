@@ -1,0 +1,102 @@
+#!/usr/bin/python
+#coding: utf-8
+
+
+"""
+NouvelOrdre exe
+
+© Feth Arezki - feth >AT< tuttu.info, 2011
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <http://www.gnu.org/licenses/>.
+"""
+
+
+from argparse import ArgumentParser
+from nouvelordre import NewOrder
+from StringIO import StringIO
+from sys import stdin, stdout
+
+
+def _do_pass(infile):
+    """
+    returns a temp file name where the result was stored
+    """
+    neworder = NewOrder(infile)
+    handle = StringIO()
+    neworder.reorder(handle)
+    result = handle.getvalue()
+    handle.close()
+    return result
+
+def main(infile, outfile):
+    """
+    BEWARE:
+    infile: a file descriptor like (must return lines when iterated over)
+    outfile: a filename or a file descriptor (with a write() method)
+    """
+    #1st pass: outfile -> tmp1
+    value1 = _do_pass(infile)
+    #2nd pass: tmp1 -> tmp2
+    value2 = _do_pass(StringIO(value1))
+
+    #check that a processed file can be processed twice without a change
+    assert value1 == value2, "Sorry, there is a bug in this "\
+        "program. Please file a bug with the processed file attached."
+
+
+    #deliver the result
+
+    if isinstance(outfile, (str, unicode)):
+        with open(outfile, 'w') as fdesc:
+            fdesc.write(value1)
+            return
+
+    #we got a handle, for instance stdout
+    outfile.write(value1)
+
+
+def _parseargs():
+    """
+    returns parsed sys.argv
+    """
+    parser = ArgumentParser(
+            description="""A tool for reordering
+            import statements inside Python code blocks.
+            Blocks separated by anything (white line for instance)
+            are considered separately.
+            """,
+            epilog="""Limitations: This script will only handle first level
+            statements. This script will not handle several "import module"
+            for the same module in the same block.
+            """,
+            )
+    parser.add_argument('--version', action='version', version='%(prog)s 0.1')
+    parser.add_argument(
+            '--infile',
+            default=stdin,
+            help='a Python source file, defaults to standard input',
+            type=lambda name: open(name, 'r')
+            )
+    parser.add_argument(
+        '--outfile',
+        default=stdout,
+        help='output, defaults to standard output',
+        )
+    return parser.parse_args()
+
+
+if __name__ == '__main__':
+    ARGS = _parseargs()
+    main(ARGS.infile, ARGS.outfile)
+

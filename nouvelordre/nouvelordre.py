@@ -1,8 +1,8 @@
-#!/usr/bin/python
 #coding: utf-8
 
+
 """
-NouvelOrdre
+NouvelOrdre lib
 © Feth Arezki - feth >AT< tuttu.info, 2011
 
 This program is free software; you can redistribute it and/or modify
@@ -256,53 +256,4 @@ class NewOrder(object):
 
         assert False, "bug"
 
-### End of real code
-
-
-### Stuff to run this as a script
-
-def main(infile, outfile):
-    """
-    infile: a file descriptor like (must return lines when iterated over)
-    outfile: a file descriptor like (must have a write() method)
-    """
-    neworder = NewOrder(infile)
-    neworder.reorder(outfile)
-
-def _parseargs():
-    """
-    returns parsed sys.argv
-    """
-    from argparse import ArgumentParser
-    from sys import stdin, stdout
-    parser = ArgumentParser(
-            description="""A tool for reordering
-            import statements inside Python code blocks.
-            Blocks separated by anything (white line for instance)
-            are considered separately.
-            """,
-            epilog="""Limitations: This script will only handle first level statements.
-            This script will not handle several "import module" for the same module in
-            the same block.
-            """,
-            )
-    parser.add_argument('--version', action='version', version='%(prog)s 0.1')
-    parser.add_argument(
-        '--infile',
-        default=stdin,
-        help='a Python source file, defaults to standard input',
-        type=lambda name: open(name, 'r')
-        )
-    parser.add_argument(
-        '--outfile',
-        default=stdout,
-        help='output, defaults to standard output',
-        type=lambda name: open(name, 'w')
-        )
-    return parser.parse_args()
-
-
-if __name__ == '__main__':
-    ARGS = _parseargs()
-    main(ARGS.infile, ARGS.outfile)
 
