@@ -30,3 +30,25 @@ Limitations
 * This script will only handle first level statements.
 * This script will not handle several "import module" for the same module in the same block.
 
+Dependances
+-----------
+
+* Python 2.6 at least (for ast)
+* enthought's python-traits
+* Python 2.7 or python-argparse
+
+Getting started
+---------------
+This is an executable script.
+
+Options::
+
+  --infile INFILE    a Python source file, defaults to standard input
+  --outfile OUTFILE  output, defaults to standard output
+
+This means equivalent common usages can be::
+
+  $ nouvelordre.py --infile mymodule.py --outfile rewritten.py
+  $ nouvelordre.py < mymodule.py > rewritten.py
+
+
