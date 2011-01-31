@@ -95,7 +95,7 @@ def eval_continuation(line, open_par_nb):
         if char == ')':
             assert open_par_nb >= 1
             open_par_nb -= 1
-    return open_par_nb, line.endswith('\\')
+    return open_par_nb, line.endswith('\\\n')
 
 
 class ImportBlock(Block):
@@ -118,14 +118,15 @@ class ImportBlock(Block):
     def isempty(self):
         return not self.imports and not self.importfroms
 
-    def add(self, statement, endline):
+    def add(self, statement, impinfo):
         """
         Add a statement to this block
         """
         assert self.followsme(statement)
 
         self._setstartline(statement)
-        self.endline = endline
+
+        self.endline, self.text = impinfo
 
         if isinstance(statement, ImportFrom):
             module = statement.module
@@ -158,7 +159,8 @@ class ImportBlock(Block):
 
     def __str__(self):
         return 'ImportBlock from line %d to line %d (%d imports)' % (
-            self.startline, self.endline, len(self.imports)
+            self.startline, self.endline,
+            len(self.imports) + len(self.importfroms)
             )
 
     def _pretty(self):
@@ -236,12 +238,12 @@ class NewOrder(object):
         current_block = ImportBlock()
 
         for imp in self._iter_imports():
-
             if not current_block.followsme(imp):
                 yield current_block
                 current_block = ImportBlock()
 
-            current_block.add(imp, self._statement_lastline(imp))
+            impinfo = self._statement_lastline(imp)
+            current_block.add(imp, impinfo)
 
         if not current_block.isempty():
             yield current_block
@@ -265,7 +267,8 @@ class NewOrder(object):
         for index, line in enumerate(self.origlines[startline - 1:]):
             open_par_nb, has_backslash = eval_continuation(line, open_par_nb)
             if not open_par_nb and not has_backslash:
-                return index + startline
+                endline = index + startline
+                return endline, self.origlines[startline - 1:endline]
 
         assert False, "bug"
 
