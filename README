@@ -1,0 +1,32 @@
+Nouvel Ordre
+============
+
+A tool for reordering import statements inside Python code blocks.
+
+Features
+--------
+* Blocks separated by anything (white line for instance) are considered separately.
+* Statements inside a block are reordered
+* Imports in one statement are reordered.
+  Example::
+
+    import sys, os
+
+  becomes::
+
+    import os, sys
+
+  or::
+
+    from module import b, a as f, c
+
+  becomes::
+
+    from module import a as f, b, c
+
+Limitations
+-----------
+
+* This script will only handle first level statements.
+* This script will not handle several "import module" for the same module in the same block.
+
