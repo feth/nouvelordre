@@ -114,6 +114,9 @@ class ImportBlock(Block):
             self.startline = -1
             self.endline = 0
 
+    def isempty(self):
+        return not self.imports and not self.importfroms
+
     def add(self, statement, endline):
         """
         Add a statement to this block
@@ -174,6 +177,7 @@ class ImportBlock(Block):
 
     content = property(fget=_content)
 
+
 class NewOrder(object):
     """
     Class handling your Python source code
@@ -185,8 +189,9 @@ class NewOrder(object):
         """
 
         self.origlines =  list(infile)
+        self.origcontent = ''.join(self.origlines)
 
-        self.parsed = parse(''.join(self.origlines)).body
+        self.parsed = parse(self.origcontent).body
 
         self.firstlevels = []
         firstlevels_dict = {}
@@ -231,7 +236,8 @@ class NewOrder(object):
 
             current_block.add(imp, self._statement_lastline(imp))
 
-        yield current_block
+        if not current_block.isempty():
+            yield current_block
 
     def _iter_imports(self):
         return iter(
