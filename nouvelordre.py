@@ -156,7 +156,7 @@ class ImportBlock(Block):
     def _content(self):
         newblock = list(self._pretty())
         newblock.sort()
-        return '\n'.join(newblock)
+        return '%s\n' % '\n'.join(newblock)
 
     content = property(fget=_content)
 
