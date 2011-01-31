@@ -26,7 +26,7 @@ from argparse import ArgumentParser
 from nouvelordre import NewOrder
 from os.path import join
 from StringIO import StringIO
-from sys import stderr, stdin, stdout
+from sys import exit, stderr, stdin, stdout
 from tempfile import mkdtemp, mkstemp
 
 
@@ -51,6 +51,9 @@ def main(infile, outfile, keep_files):
     #1st pass: outfile -> tmp1
     try:
         value1 = _do_pass(infile)
+    except NotImplementedError, err:
+        stderr.write('%s\n' % err)
+        exit(130)
     except Exception:
         stderr.write("Error in first pass on file %s .\n" % infile.name)
         raise
@@ -73,6 +76,20 @@ def main(infile, outfile, keep_files):
 
     #check that a processed file can be processed twice without a change
     if value1 != value2:
+        try:
+            if hasattr(infile, 'name') and not infile.isatty():
+                with open(infile.name, 'r') as handle:
+                    try:
+                        compile(handle.read(), infile.name, 'exec')
+                    except (SyntaxError, TypeError):
+                        stderr.write(
+                            "An error occured with your file, however I "
+                            "cannot even compile it, thus exiting with status 129"
+                            )
+                        exit(129)
+        except Exception, err:
+            stderr.write("Unexpected err: %s\n" % err)
+
         if not keep_files:
             assert False, "Sorry, there is a bug in this program when ran "\
             "against %s. You may want to rerun with --dump."
