@@ -167,6 +167,8 @@ class ImportBlock(Block):
                 starindex = data.index(('*', None))
                 data.pop(starindex)
                 yield spitfrom(module, (('*', None),))
+                if not data:
+                    continue
             data = nice_fromline(data)
             yield spitfrom(module, data)
         for imp, asname in self.imports.iteritems():
