@@ -1,0 +1,4 @@
+include nouvelordre/*.py
+include *.sh
+include README.rst
+include LICENSE
