@@ -51,8 +51,8 @@ def main(infile, outfile):
     value2 = _do_pass(StringIO(value1))
 
     #check that a processed file can be processed twice without a change
-    assert value1 == value2, "Sorry, there is a bug in this "\
-        "program. Please file a bug with the processed file attached."
+    assert value1 == value2, "Sorry, there is a bug in this program. Please "\
+        "file a bug with the processed file attached (%s)." % infile
 
 
     #deliver the result
