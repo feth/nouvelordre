@@ -139,20 +139,23 @@ def _parseargs():
             for the same module in the same block.
             """,
             )
-    parser.add_argument('--version', action='version', version='%(prog)s 0.1')
+    parser.add_argument('--version', '-v', action='version', version='%(prog)s 0.1')
     parser.add_argument(
             '--infile',
+            '-i',
             default=stdin,
             help='a Python source file, defaults to standard input',
             type=lambda name: open(name, 'r')
             )
     parser.add_argument(
         '--outfile',
+        '-o',
         default=stdout,
         help='output, defaults to standard output',
         )
     parser.add_argument(
         '--dump',
+        '-d',
         action='store_true',
         default=False,
         help='In case of failure, keep processing data in files',
