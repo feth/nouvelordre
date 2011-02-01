@@ -19,6 +19,9 @@ Common usage
 **'reorder'** is an executable script::
 
   $ nouvelordre.py --infile mymodule.py --outfile rewritten.py
+
+is equivalent to::
+
   $ nouvelordre.py < mymodule.py > rewritten.py
 
 You may want to rewrite all files in a directory, say '/home/toto/project'::
@@ -55,8 +58,6 @@ options::
   --outfile OUTFILE, -o OUTFILE         output, defaults to standard output
   --dump, -d                            in case of failure, keep processing data in files
   --version, -v                         prints version and exits
-
-This means equivalent common usages can be::
 
 Features
 --------
