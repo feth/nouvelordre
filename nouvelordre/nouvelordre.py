@@ -129,7 +129,7 @@ class ImportBlock(Block):
         self.endline, self.text = impinfo
 
         if isinstance(statement, ImportFrom):
-            module = statement.module
+            module = '.'*statement.level + statement.module
             self.importfroms.setdefault(module, [])
             for alias in statement.names:
                 self.importfroms[module].append((alias.name, alias.asname))
