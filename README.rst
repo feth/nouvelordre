@@ -8,7 +8,8 @@ This project lives on github:
 * github html page: http://feth.github.com/nouvelordre/
 * github classic page: https://github.com/feth/nouvelordre
 * repository::
-    $ git clone git://github.com/feth/nouvelordre.git
+
+  $ git clone git://github.com/feth/nouvelordre.git
 
 Getting started
 ---------------
