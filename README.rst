@@ -16,7 +16,7 @@ Getting started
 
 Common usage
 ~~~~~~~~~~~~
-'reorder' is an executable script::
+**'reorder'** is an executable script::
 
   $ nouvelordre.py --infile mymodule.py --outfile rewritten.py
   $ nouvelordre.py < mymodule.py > rewritten.py
@@ -34,12 +34,15 @@ Installation
 The installation procedure is not very good for the moment but should work.
 
 From source::
+
   $ python setup.py install
 
 From the internet (Pypi - http://pypi.python.org )::
+
   $ pip install nouvelordre
 
 As a side note, I suggest installing in a *virtualenv* -this means running the following before installing as above, therefore not polluting your system::
+
   $ virtualenv nouvelordre
   $ cd nouvelordre
   $ source ./bin/activate
@@ -83,7 +86,7 @@ Limitations
 
 * This script will only handle first level statements (ie. not indented statements).
 * This script will not handle several "import module" for the same module in the same block.
-* Some files are not compilables by ast.parse (help appreciated).
+* Some files are not compilables by ast.parse() (help appreciated).
 
 Dependances
 -----------
@@ -111,7 +114,7 @@ Disaster avoidance
 
 This software is not perfect and might kill your golden retriever or ruin your diploma but I have tried hard for this never to happen.
 
-`reorder` performs 2 passes. Pass 1 is performed on the original input; pass 2 is performed on the result of pass 1.
+**'reorder'** performs 2 passes. Pass 1 is performed on the original input; pass 2 is performed on the result of pass 1.
 If any error occurred during either pass, the program exits and leaves your files untouched.
 If pass 1 and 2 would give a different result, the program exits and leaves your files untouched. This is not a 100% guarantee, but it ensures the file stays compilable and all optimizations were performed.
 
