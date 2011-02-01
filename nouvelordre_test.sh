@@ -19,7 +19,7 @@ for file in $(locate "*.py")
 			echo "...ok"
 			;;
 		*)
-			echo "Please send the bug report (nouvelordre_bug_report) to feth@tuttu.info. Many thanks."
+			echo "Please see https://github.com/feth/nouvelordre/issues and maybe leave a message. Many thanks."
 			exit 1
 			;;
 	esac
