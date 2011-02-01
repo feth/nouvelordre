@@ -10,6 +10,19 @@ This project lives on github:
 * repository::
     $ git clone git://github.com/feth/nouvelordre.git
 
+Getting started
+---------------
+'reorder' is an executable script.
+
+Options::
+
+  --infile INFILE    a Python source file, defaults to standard input
+  --outfile OUTFILE  output, defaults to standard output
+
+This means equivalent common usages can be::
+
+  $ nouvelordre.py --infile mymodule.py --outfile rewritten.py
+  $ nouvelordre.py < mymodule.py > rewritten.py
 
 Features
 --------
@@ -37,6 +50,7 @@ Limitations
 
 * This script will only handle first level statements.
 * This script will not handle several "import module" for the same module in the same block.
+* Some files are not compilables by ast.parse (help appreciated).
 
 Dependances
 -----------
@@ -52,18 +66,9 @@ Recommended
 
 * enthought's python-traits - to avoid bug while coding this
 
-Getting started
----------------
-This is an executable script.
-
-Options::
-
-  --infile INFILE    a Python source file, defaults to standard input
-  --outfile OUTFILE  output, defaults to standard output
-
-This means equivalent common usages can be::
-
-  $ nouvelordre.py --infile mymodule.py --outfile rewritten.py
-  $ nouvelordre.py < mymodule.py > rewritten.py
-
+Exit codes
+----------
+* 0 if all is well.
+* 129 if NotImplementedError (an import on the same line as another instruction, separated by ';').
+* 130 if ast.parse was not able to compile the file.
 
