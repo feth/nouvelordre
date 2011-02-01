@@ -11,6 +11,9 @@ This project lives on github:
 
   $ git clone git://github.com/feth/nouvelordre.git
 
+It also lives on pypi:
+* http://pypi.python.org/pypi/nouvelordre/
+
 Getting started
 ---------------
 
