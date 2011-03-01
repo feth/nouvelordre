@@ -105,6 +105,7 @@ Recommended
 ~~~~~~~~~~~
 
 * enthought's python-traits - provides type verification and may catch some bugs (absolutely compulsory if you intend to patch this software).
+* If you're installing traits from source, think of having python-dev installed.
 
 Exit codes
 ----------
