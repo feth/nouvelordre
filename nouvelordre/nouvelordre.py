@@ -148,7 +148,7 @@ class ImportBlock(Block):
         """
         if not self.importfroms:
             return True
-        return statement.lineno == self.endline + 1
+        return statement.lineno in (self.endline + 1, self.endline)
 
     def _setstartline(self, statement):
         startline = statement.lineno
@@ -205,14 +205,6 @@ class NewOrder(object):
         self.firstlevels = []
         firstlevels_dict = {}
         for firstlevel in self.parsed:
-            lineno = firstlevel.lineno
-            registered = firstlevels_dict.setdefault(lineno, firstlevel)
-            if  registered != firstlevel:
-                raise NotImplementedError(
-                    "Not handling several first level statements on the "
-                    "same line (line %d of %s) -avoid semicolumns."
-                    % (lineno, infile.name)
-                    )
             self.firstlevels.append(firstlevel)
 
     def reorder(self, fdesc):
@@ -228,7 +220,7 @@ class NewOrder(object):
         """
         last_handled = 0
         for block in self._iter_importblocks():
-            if block.startline != last_handled + 1:
+            if block.startline > last_handled + 1:
                 yield AnyBlock(self.origlines[last_handled:block.startline - 1])
             yield block
             last_handled = block.endline
