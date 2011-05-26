@@ -26,7 +26,7 @@ from argparse import ArgumentParser
 from nouvelordre import NewOrder
 from os.path import join
 from StringIO import StringIO
-from sys import exit, stderr, stdin, stdout
+from sys import exit, stderr, stdin, stdout, version
 from tempfile import mkdtemp, mkstemp
 
 
@@ -139,7 +139,8 @@ def _parseargs():
             for the same module in the same block.
             """,
             )
-    parser.add_argument('--version', '-v', action='version', version='%(prog)s 0.1')
+    parser.add_argument('--version', '-v', action='version',
+        version='%(prog)s 0.1 - Python ' + version.replace('\n', ' '))
     parser.add_argument(
             '--infile',
             '-i',
